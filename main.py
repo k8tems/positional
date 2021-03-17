@@ -29,6 +29,11 @@ def is_point_in_triangle(t1, t2, t3, p):
     return (c1 < 0 and c2 < 0 and c3 < 0) or (c1 > 0 and c2 > 0 and c3 > 0)
 
 
+def facing_to_radians(f, F):
+    # `facing`をラジアンに変換する
+    return (F[0] - f) / (F[0] - F[1]) * 2 * np.pi + np.pi / 2
+
+
 def is_back(e, F, width=30):
     """
     ボスの座標を中心とした円から背面の三角形を計算して、
@@ -41,7 +46,7 @@ def is_back(e, F, width=30):
     f = tr['facing']
     target_crds = parse_loc(tr)
     source_crds = parse_loc(e['sourceResources'])
-    f_r = (F[0] - f) / (F[0] - F[1]) * 2 * np.pi + np.pi / 2  # ボスが向いてる向きのラジアン値
+    f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
     left = get_circumference_crd(target_crds, width, f_r+3*np.pi/4)
     right = get_circumference_crd(target_crds, width, f_r+5*np.pi/4)
     return is_point_in_triangle(
