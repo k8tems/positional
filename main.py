@@ -26,9 +26,7 @@ class PositionalContext(dict):
 def get_circumference_crd(center, radius, angle):
     # 与えられた情報を元に円周上の座標を返す
     # `angle`はラジアン
-    x = center[0] + (radius * np.cos(angle))
-    y = center[1] + (radius * np.sin(angle))
-    return x, y
+    return center[0] + (radius * np.cos(angle)), center[1] + (radius * np.sin(angle))
 
 
 def get_point_symmetry(p, center):
