@@ -64,16 +64,16 @@ def get_right_flack_corners(center, front, width=DEFAULT_WIDTH):
 
 def _is_flack(f, target_loc, source_loc, F, width):
     f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
-    left_corner, right_corner = get_left_flack_corners(target_loc, f_r, width)
+    top_corner, bottom_corner = get_left_flack_corners(target_loc, f_r, width)
     if is_point_in_triangle(source_loc,
-        get_point_symmetry_y(left_corner, target_loc[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
-        get_point_symmetry_y(right_corner, target_loc[1]),
+        get_point_symmetry_y(top_corner, target_loc[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
+        get_point_symmetry_y(bottom_corner, target_loc[1]),
         target_loc):
         return True
-    left_corner, right_corner = get_right_flack_corners(target_loc, f_r, width)
+    top_corner, bottom_corner = get_right_flack_corners(target_loc, f_r, width)
     if is_point_in_triangle(source_loc,
-        get_point_symmetry_y(left_corner, target_loc[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
-        get_point_symmetry_y(right_corner, target_loc[1]),
+        get_point_symmetry_y(top_corner, target_loc[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
+        get_point_symmetry_y(bottom_corner, target_loc[1]),
         target_loc):
         return True
     return False
