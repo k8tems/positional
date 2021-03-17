@@ -42,14 +42,14 @@ def get_back_corners(center, front, width=DEFAULT_WIDTH):
         get_circumference_crd(center, width, front + 5 * np.pi / 4)
 
 
-def _is_back(f, target_crds, source_crds, F, width):
+def _is_back(f, target_loc, source_loc, F, width):
     f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
-    left_corner, right_corner = get_back_corners(target_crds, f_r, width)
+    left_corner, right_corner = get_back_corners(target_loc, f_r, width)
     return is_point_in_triangle(
-        source_crds,
-        get_point_symmetry_y(left_corner, target_crds[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
-        get_point_symmetry_y(right_corner, target_crds[1]),
-        target_crds)
+        source_loc,
+        get_point_symmetry_y(left_corner, target_loc[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
+        get_point_symmetry_y(right_corner, target_loc[1]),
+        target_loc)
 
 
 def parse_loc(res):
