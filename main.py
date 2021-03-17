@@ -41,7 +41,7 @@ def is_point_in_triangle(t1, t2, t3, p):
     c1 = (t2[0]-t1[0])*(p[1]-t1[1])-(t2[1]-t1[1])*(p[0]-t1[0])
     c2 = (t3[0]-t2[0])*(p[1]-t2[1])-(t3[1]-t2[1])*(p[0]-t2[0])
     c3 = (t1[0]-t3[0])*(p[1]-t3[1])-(t1[1]-t3[1])*(p[0]-t3[0])
-    return (c1<0 and c2<0 and c3<0) or (c1>0 and c2>0 and c3>0)
+    return (c1 < 0 and c2 < 0 and c3 < 0) or (c1 > 0 and c2 > 0 and c3 > 0)
 
 
 def is_back(e, F, width=30):
