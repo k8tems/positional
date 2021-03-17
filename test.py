@@ -8,7 +8,7 @@ class TestCase(unittest.TestCase):
         self.facing_rng = (-158, -786)
 
     @staticmethod
-    def read_event(self, fname):
+    def read_event(fname):
         with open(fname) as f:
             return json.loads(f.read())
 

@@ -21,7 +21,7 @@ def get_point_symmetry_y(p, center_y):
     return p[0], get_point_symmetry(p[1], center_y)
 
 
-def is_point_in_triangle(t1, t2, t3, p):
+def is_point_in_triangle(p, t1, t2, t3):
     c1 = (t2[0]-t1[0])*(p[1]-t1[1])-(t2[1]-t1[1])*(p[0]-t1[0])
     c2 = (t3[0]-t2[0])*(p[1]-t2[1])-(t3[1]-t2[1])*(p[0]-t2[0])
     c3 = (t1[0]-t3[0])*(p[1]-t3[1])-(t1[1]-t3[1])*(p[0]-t3[0])
@@ -46,9 +46,10 @@ def _is_back(f, target_crds, source_crds, F, width):
     f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
     left_corner, right_corner = get_back_corners(target_crds, f_r, width)
     return is_point_in_triangle(
+        source_crds,
         get_point_symmetry_y(left_corner, target_crds[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
         get_point_symmetry_y(right_corner, target_crds[1]),
-        target_crds, source_crds)
+        target_crds)
 
 
 def parse_loc(res):
