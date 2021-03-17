@@ -1,26 +1,8 @@
 import numpy as np
 
 
-class PositionalContext(dict):
-    @property
-    def tr(self):
-        return self['targetResources']
-
-    @property
-    def target_crds(self):
-        return self.tr['x'] / 100, self.tr['y'] / 100
-
-    @property
-    def target_facing(self):
-        return self.tr['facing']
-
-    @property
-    def sr(self):
-        return self['sourceResources']
-
-    @property
-    def source_crds(self):
-        return self.sr['x'] / 100, self.sr['y'] / 100
+def parse_loc(res):
+    return res['x'] / 100, res['y'] / 100
 
 
 def get_circumference_crd(center, radius, angle):
@@ -55,12 +37,14 @@ def is_back(e, F, width=30):
     F: `facing`の値の範囲(他のイベントより推定)
     width: 円の幅(可視化しないなら大きくすればいい)
     """
-    ctx = PositionalContext(e)
-    f = ctx.target_facing
+    tr = e['targetResources']
+    f = tr['facing']
+    target_crds = parse_loc(tr)
+    source_crds = parse_loc(e['sourceResources'])
     f_r = (F[0] - f) / (F[0] - F[1]) * 2 * np.pi + np.pi / 2  # ボスが向いてる向きのラジアン値
-    left = get_circumference_crd(ctx.target_crds, width, f_r+3*np.pi/4)
-    right = get_circumference_crd(ctx.target_crds, width, f_r+5*np.pi/4)
+    left = get_circumference_crd(target_crds, width, f_r+3*np.pi/4)
+    right = get_circumference_crd(target_crds, width, f_r+5*np.pi/4)
     return is_point_in_triangle(
-        get_point_symmetry_y(left, ctx.target_crds[1]),
-        get_point_symmetry_y(right, ctx.target_crds[1]),
-        ctx.target_crds, ctx.source_crds)
+        get_point_symmetry_y(left, target_crds[1]),
+        get_point_symmetry_y(right, target_crds[1]),
+        target_crds, source_crds)
