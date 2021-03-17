@@ -30,7 +30,7 @@ class TestCase(unittest.TestCase):
 
     def test_flack_failure_short_width(self):
         # 開幕3GCD目の方向指定成功してる月光
-        self.assertFalse(is_flack(self.read_event('fixtures/flack.json'), facing_rng=self.facing_rng, width=5))
+        self.assertFalse(is_flack(self.read_event('fixtures/flack.json'), facing_rng=self.facing_rng, width=3))
 
     def test_flack_failure_behind(self):
         # 開幕3GCD目の方向指定成功してる月光
