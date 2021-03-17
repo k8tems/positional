@@ -30,10 +30,14 @@ def facing_to_radians(f, F):
     return (F[0] - f) / (F[0] - F[1]) * 2 * np.pi + np.pi / 2
 
 
-def _is_back(f, target_crds, source_crds, F, width):
+def get_back_corners(f, target_crds, F, width):
     f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
-    left = get_circumference_crd(target_crds, width, f_r+3*np.pi/4)
-    right = get_circumference_crd(target_crds, width, f_r+5*np.pi/4)
+    return get_circumference_crd(target_crds, width, f_r+3*np.pi/4), \
+        get_circumference_crd(target_crds, width, f_r+5*np.pi/4)
+
+
+def _is_back(f, target_crds, source_crds, F, width):
+    left, right = get_back_corners(f, target_crds, F, width)
     return is_point_in_triangle(
         get_point_symmetry_y(left, target_crds[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
         get_point_symmetry_y(right, target_crds[1]),
