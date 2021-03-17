@@ -55,13 +55,13 @@ def parse_loc(res):
     return res['x'] / 100, res['y'] / 100
 
 
-def is_back(e, F, width=DEFAULT_WIDTH):
+def is_back(event, facing_rng, width=DEFAULT_WIDTH):
     """
     ボスの座標を中心とした円から背面の三角形を計算して、
     プレイヤーがその中にいれば`True`を返す
-    e: FFLogsのダメージイベント
-    F: `facing`の値の範囲(他のイベントより推定)
+    event: FFLogsのダメージイベント
+    facing_rng: `facing`の値の範囲(他のイベントより推定)
     width: 円の幅(可視化しないなら大きくすればいい)
     """
-    tr = e['targetResources']
-    return _is_back(tr['facing'], parse_loc(tr), parse_loc(e['sourceResources']), F, width)
+    tr = event['targetResources']
+    return _is_back(tr['facing'], parse_loc(tr), parse_loc(event['sourceResources']), facing_rng, width)
