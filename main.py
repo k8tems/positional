@@ -37,6 +37,11 @@ def get_point_symmetry(p, center):
     return center - d if p > center else center + d
 
 
+def get_point_symmetry_y(p, center_y):
+    # `center`を中心として`y`座標を反転させる
+    return p[0], get_point_symmetry(p[1], center_y)
+
+
 def is_point_in_triangle(t1, t2, t3, p):
     c1 = (t2[0]-t1[0])*(p[1]-t1[1])-(t2[1]-t1[1])*(p[0]-t1[0])
     c2 = (t3[0]-t2[0])*(p[1]-t2[1])-(t3[1]-t2[1])*(p[0]-t2[0])
@@ -57,6 +62,7 @@ def is_back(e, F, width=30):
     f_r = (F[0] - f) / (F[0] - F[1]) * 2 * np.pi + np.pi / 2
     left = get_circumference_crd(ctx.target_crds, width, f_r+3*np.pi/4)
     right = get_circumference_crd(ctx.target_crds, width, f_r+5*np.pi/4)
-    left_2 = left[0], get_point_symmetry(left[1], ctx.target_crds[1])
-    right_2 = right[0], get_point_symmetry(right[1], ctx.target_crds[1])
-    return is_point_in_triangle(left_2, right_2, ctx.target_crds, ctx.source_crds)
+    return is_point_in_triangle(
+        get_point_symmetry_y(left, ctx.target_crds[1]),
+        get_point_symmetry_y(right, ctx.target_crds[1]),
+        ctx.target_crds, ctx.source_crds)
