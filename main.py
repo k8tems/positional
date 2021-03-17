@@ -54,8 +54,7 @@ def is_back(e, F, width=30):
     """
     ctx = PositionalContext(e)
     f = ctx.target_facing
-    F_l = (F[0] - F[1])
-    f_r = (F[0] - f) / F_l * 2 * np.pi + np.pi / 2
+    f_r = (F[0] - f) / (F[0] - F[1]) * 2 * np.pi + np.pi / 2
     left = get_circumference_crd(ctx.target_crds, width, f_r+3*np.pi/4)
     right = get_circumference_crd(ctx.target_crds, width, f_r+5*np.pi/4)
     left_2 = left[0], get_point_symmetry(left[1], ctx.target_crds[1])
