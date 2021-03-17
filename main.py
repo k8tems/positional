@@ -62,7 +62,9 @@ def is_back(event, facing_rng, width=DEFAULT_WIDTH):
     プレイヤーがその中にいれば`True`を返す
     event: FFLogsのダメージイベント
     facing_rng: `facing`の値の範囲(他のイベントより推定)
-    width: 円の幅(可視化しないなら大きくすればいい)
+    width: 円の幅
+    計算の結果が狂う(背面にいるのに三角形の外に出る)事があるので、
+    可視化しないなら広めに取る
     """
     tr = event['targetResources']
     return _is_back(tr['facing'], parse_loc(tr), parse_loc(event['sourceResources']), facing_rng, width)
