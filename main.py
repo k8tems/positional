@@ -50,6 +50,6 @@ def is_back(e, F, width=30):
     left = get_circumference_crd(target_crds, width, f_r+3*np.pi/4)
     right = get_circumference_crd(target_crds, width, f_r+5*np.pi/4)
     return is_point_in_triangle(
-        get_point_symmetry_y(left, target_crds[1]),
+        get_point_symmetry_y(left, target_crds[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
         get_point_symmetry_y(right, target_crds[1]),
         target_crds, source_crds)
