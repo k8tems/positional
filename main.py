@@ -37,7 +37,7 @@ def get_point_symmetry(p, center):
     return center - d if p > center else center + d
 
 
-def is_point_in_triangle_2(x1, y1, x2, y2, x3, y3, xp, yp):
+def is_point_in_triangle(x1, y1, x2, y2, x3, y3, xp, yp):
     c1 = (x2-x1)*(yp-y1)-(y2-y1)*(xp-x1)
     c2 = (x3-x2)*(yp-y2)-(y3-y2)*(xp-x2)
     c3 = (x1-x3)*(yp-y3)-(y1-y3)*(xp-x3)
@@ -60,6 +60,6 @@ def is_back(e, F, width=30):
     right = get_circumference_crd(ctx.target_crds, width, f_r+5*np.pi/4)
     left_2 = left[0], get_point_symmetry(left[1], ctx.target_crds[1])
     right_2 = right[0], get_point_symmetry(right[1], ctx.target_crds[1])
-    return is_point_in_triangle_2(
+    return is_point_in_triangle(
         left_2[0], left_2[1], right_2[0], right_2[1], ctx.target_crds[0], ctx.target_crds[1],
         ctx.source_crds[0], ctx.source_crds[1])
