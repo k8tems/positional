@@ -30,10 +30,10 @@ def facing_to_radians(f, F):
     return (F[0] - f) / (F[0] - F[1]) * 2 * np.pi + np.pi / 2
 
 
-def get_back_corners(f, target_crds, F, width):
+def get_back_corners(f, center, F, width):
     f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
-    return get_circumference_crd(target_crds, width, f_r+3*np.pi/4), \
-        get_circumference_crd(target_crds, width, f_r+5*np.pi/4)
+    return get_circumference_crd(center, width, f_r + 3 * np.pi / 4), \
+        get_circumference_crd(center, width, f_r + 5 * np.pi / 4)
 
 
 def _is_back(f, target_crds, source_crds, F, width):
