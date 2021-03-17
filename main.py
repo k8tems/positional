@@ -52,6 +52,33 @@ def _is_back(f, target_loc, source_loc, F, width):
         target_loc)
 
 
+def get_left_flack_corners(center, front, width=DEFAULT_WIDTH):
+    return get_circumference_crd(center, width, front + np.pi / 4), \
+        get_circumference_crd(center, width, front + 3 * np.pi / 4)
+
+
+def get_right_flack_corners(center, front, width=DEFAULT_WIDTH):
+    return get_circumference_crd(center, width, front - np.pi / 4), \
+        get_circumference_crd(center, width, front + 5 * np.pi / 4)
+
+
+def _is_flack(f, target_loc, source_loc, F, width):
+    f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
+    left_corner, right_corner = get_left_flack_corners(target_loc, f_r, width)
+    if is_point_in_triangle(source_loc,
+        get_point_symmetry_y(left_corner, target_loc[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
+        get_point_symmetry_y(right_corner, target_loc[1]),
+        target_loc):
+        return True
+    left_corner, right_corner = get_right_flack_corners(target_loc, f_r, width)
+    if is_point_in_triangle(source_loc,
+        get_point_symmetry_y(left_corner, target_loc[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
+        get_point_symmetry_y(right_corner, target_loc[1]),
+        target_loc):
+        return True
+    return False
+
+
 def parse_loc(res):
     return res['x'] / 100, res['y'] / 100
 
@@ -68,3 +95,17 @@ def is_back(event, facing_rng, width=DEFAULT_WIDTH):
     """
     tr = event['targetResources']
     return _is_back(tr['facing'], parse_loc(tr), parse_loc(event['sourceResources']), facing_rng, width)
+
+
+def is_flack(event, facing_rng, width=DEFAULT_WIDTH):
+    """
+    ボスの座標を中心とした円から背面の三角形を計算して、
+    プレイヤーがその中にいれば`True`を返す
+    event: FFLogsのダメージイベント
+    facing_rng: `facing`の値の範囲(他のイベントより推定)
+    width: 円の幅
+    計算の結果が狂う(背面にいるのに三角形の外に出る)事があるので、
+    可視化しないなら広めに取る
+    """
+    tr = event['targetResources']
+    return _is_flack(tr['facing'], parse_loc(tr), parse_loc(event['sourceResources']), facing_rng, width)
