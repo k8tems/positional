@@ -1,6 +1,9 @@
 import numpy as np
 
 
+DEFAULT_WIDTH = 100
+
+
 def get_circumference_crd(center, radius, angle):
     # 与えられた情報を元に円周上の座標を返す
     # `angle`はラジアン
@@ -30,14 +33,18 @@ def facing_to_radians(f, F):
     return (F[0] - f) / (F[0] - F[1]) * 2 * np.pi + np.pi / 2
 
 
-def get_back_corners(f, center, F, width):
-    f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
-    return get_circumference_crd(center, width, f_r + 3 * np.pi / 4), \
-        get_circumference_crd(center, width, f_r + 5 * np.pi / 4)
+def get_back_corners(center, front, width=DEFAULT_WIDTH):
+    # 背面矩形の左下と右下の座標を返す
+    # `center`: ボスの座標
+    # `width`: 計算に使う円の半径(可視化しないなら適当に広めで)
+    # `front`: 向いてる向き(ラジアン)
+    return get_circumference_crd(center, width, front + 3 * np.pi / 4), \
+        get_circumference_crd(center, width, front + 5 * np.pi / 4)
 
 
 def _is_back(f, target_crds, source_crds, F, width):
-    left_corner, right_corner = get_back_corners(f, target_crds, F, width)
+    f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
+    left_corner, right_corner = get_back_corners(target_crds, f_r, width)
     return is_point_in_triangle(
         get_point_symmetry_y(left_corner, target_crds[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
         get_point_symmetry_y(right_corner, target_crds[1]),
@@ -48,7 +55,7 @@ def parse_loc(res):
     return res['x'] / 100, res['y'] / 100
 
 
-def is_back(e, F, width=30):
+def is_back(e, F, width=DEFAULT_WIDTH):
     """
     ボスの座標を中心とした円から背面の三角形を計算して、
     プレイヤーがその中にいれば`True`を返す
