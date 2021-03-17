@@ -1,10 +1,6 @@
 import numpy as np
 
 
-def parse_loc(res):
-    return res['x'] / 100, res['y'] / 100
-
-
 def get_circumference_crd(center, radius, angle):
     # 与えられた情報を元に円周上の座標を返す
     # `angle`はラジアン
@@ -34,6 +30,20 @@ def facing_to_radians(f, F):
     return (F[0] - f) / (F[0] - F[1]) * 2 * np.pi + np.pi / 2
 
 
+def _is_back(f, target_crds, source_crds, F, width):
+    f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
+    left = get_circumference_crd(target_crds, width, f_r+3*np.pi/4)
+    right = get_circumference_crd(target_crds, width, f_r+5*np.pi/4)
+    return is_point_in_triangle(
+        get_point_symmetry_y(left, target_crds[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
+        get_point_symmetry_y(right, target_crds[1]),
+        target_crds, source_crds)
+
+
+def parse_loc(res):
+    return res['x'] / 100, res['y'] / 100
+
+
 def is_back(e, F, width=30):
     """
     ボスの座標を中心とした円から背面の三角形を計算して、
@@ -43,13 +53,4 @@ def is_back(e, F, width=30):
     width: 円の幅(可視化しないなら大きくすればいい)
     """
     tr = e['targetResources']
-    f = tr['facing']
-    target_crds = parse_loc(tr)
-    source_crds = parse_loc(e['sourceResources'])
-    f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
-    left = get_circumference_crd(target_crds, width, f_r+3*np.pi/4)
-    right = get_circumference_crd(target_crds, width, f_r+5*np.pi/4)
-    return is_point_in_triangle(
-        get_point_symmetry_y(left, target_crds[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
-        get_point_symmetry_y(right, target_crds[1]),
-        target_crds, source_crds)
+    return _is_back(tr['facing'], parse_loc(tr), parse_loc(e['sourceResources']), F, width)
