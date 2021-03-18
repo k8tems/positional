@@ -43,6 +43,7 @@ def get_quadrant_corners(center, front, width, idx):
         get_circumference_crd(center, width, front + p_2 * 2 * np.pi)
 
 
+# `tilt`は円の北がx軸からどれだけ反時計回りに傾いてるかをラジアンで表す値
 TargetCircle = namedtuple('TargetCircle', 'center width tilt')
 
 
