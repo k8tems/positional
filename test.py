@@ -24,16 +24,18 @@ class TestCase(unittest.TestCase):
         # 5:12頃の影潜りの方向指定失敗してるイベント
         self.assertFalse(is_back(self.read_event('fixtures/upper_left.json'), facing_rng=self.facing_rng))
 
-    def test_flack_success(self):
+    def test_right_success(self):
         # 開幕3GCD目の方向指定成功してる月光
-        self.assertTrue(is_flack(self.read_event('fixtures/flack.json'), facing_rng=self.facing_rng))
+        self.assertTrue(is_flack(self.read_event('fixtures/right.json'), facing_rng=self.facing_rng))
+
+    def test_left_success(self):
+        # 開幕3GCD目の方向指定成功してる月光
+        self.assertTrue(is_flack(self.read_event('fixtures/left.json'), facing_rng=self.facing_rng))
 
     def test_flack_failure_short_width(self):
-        # 開幕3GCD目の方向指定成功してる月光
-        self.assertFalse(is_flack(self.read_event('fixtures/flack.json'), facing_rng=self.facing_rng, width=3))
+        self.assertFalse(is_flack(self.read_event('fixtures/right.json'), facing_rng=self.facing_rng, width=3))
 
     def test_flack_failure_behind(self):
-        # 開幕3GCD目の方向指定成功してる月光
         self.assertFalse(is_flack(self.read_event('fixtures/back.json'), facing_rng=self.facing_rng))
 
 
