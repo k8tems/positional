@@ -62,15 +62,24 @@ def get_right_flack_corners(center, front, width=DEFAULT_WIDTH):
         get_circumference_crd(center, width, front + 5 * np.pi / 4)
 
 
+def get_quadrant_corners(center, front, width, idx):
+    # タゲサークルを罰印で4つに分けた時の第n象限の円周座標を返す
+    # `idx`は[0,1,2,3]の値を取り、北から反時計回りに増加
+    p_1 = -1/8 + (1/4) * idx
+    p_2 = p_1 + 1/4
+    return get_circumference_crd(center, width, front + p_1 * 2 * np.pi), \
+        get_circumference_crd(center, width, front + p_2 * 2 * np.pi)
+
+
 def _is_flack(f, target_loc, source_loc, F, width):
     f_r = facing_to_radians(f, F)
-    top_corner, bottom_corner = get_left_flack_corners(target_loc, f_r, width)
+    top_corner, bottom_corner = get_quadrant_corners(target_loc, f_r, width, 1)
     if is_point_in_triangle(source_loc,
         get_point_symmetry_y(top_corner, target_loc[1]),
         get_point_symmetry_y(bottom_corner, target_loc[1]),
         target_loc):
         return True
-    top_corner, bottom_corner = get_right_flack_corners(target_loc, f_r, width)
+    top_corner, bottom_corner = get_quadrant_corners(target_loc, f_r, width, 3)
     if is_point_in_triangle(source_loc,
         get_point_symmetry_y(top_corner, target_loc[1]),
         get_point_symmetry_y(bottom_corner, target_loc[1]),
