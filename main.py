@@ -42,8 +42,8 @@ def get_quadrant_corners(center, front, width, idx):
         get_circumference_crd(center, width, front + p_2 * 2 * np.pi)
 
 
-def is_point_in_quadrant(p, idx, center, f_r, width):
-    left_corner, right_corner = get_quadrant_corners(center, f_r, width, idx)
+def is_point_in_quadrant(p, idx, center, tilt, width):
+    left_corner, right_corner = get_quadrant_corners(center, tilt, width, idx)
     return is_point_in_triangle(
         p,
         get_point_symmetry_y(left_corner, center[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
