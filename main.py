@@ -33,25 +33,6 @@ def facing_to_radians(f, F):
     return (F[0] - f) / (F[0] - F[1]) * 2 * np.pi + np.pi / 2
 
 
-def get_back_corners(center, front, width=DEFAULT_WIDTH):
-    # 背面矩形の左下と右下の座標を返す
-    # `center`: ボスの座標
-    # `width`: 計算に使う円の半径(可視化しないなら適当に広めで)
-    # `front`: 向いてる向き(ラジアン)
-    return get_circumference_crd(center, width, front + 3 * np.pi / 4), \
-        get_circumference_crd(center, width, front + 5 * np.pi / 4)
-
-
-def _is_back(f, target_loc, source_loc, F, width):
-    f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
-    left_corner, right_corner = get_back_corners(target_loc, f_r, width)
-    return is_point_in_triangle(
-        source_loc,
-        get_point_symmetry_y(left_corner, target_loc[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
-        get_point_symmetry_y(right_corner, target_loc[1]),
-        target_loc)
-
-
 def get_quadrant_corners(center, front, width, idx):
     # タゲサークルを罰印で4つに分けた時の第n象限の円周座標を返す
     # `idx`は[0,1,2,3]の値を取り、北から反時計回りに増加
@@ -59,6 +40,16 @@ def get_quadrant_corners(center, front, width, idx):
     p_2 = p_1 + 1/4
     return get_circumference_crd(center, width, front + p_1 * 2 * np.pi), \
         get_circumference_crd(center, width, front + p_2 * 2 * np.pi)
+
+
+def _is_back(f, target_loc, source_loc, F, width):
+    f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
+    left_corner, right_corner = get_quadrant_corners(target_loc, f_r, width, 2)
+    return is_point_in_triangle(
+        source_loc,
+        get_point_symmetry_y(left_corner, target_loc[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
+        get_point_symmetry_y(right_corner, target_loc[1]),
+        target_loc)
 
 
 def _is_flack(f, target_loc, source_loc, F, width):
