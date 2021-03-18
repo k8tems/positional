@@ -98,14 +98,6 @@ def is_back(event, facing_rng, width=DEFAULT_WIDTH):
 
 
 def is_flack(event, facing_rng, width=DEFAULT_WIDTH):
-    """
-    ボスの座標を中心とした円から背面の三角形を計算して、
-    プレイヤーがその中にいれば`True`を返す
-    event: FFLogsのダメージイベント
-    facing_rng: `facing`の値の範囲(他のイベントより推定)
-    width: 円の幅
-    計算の結果が狂う(背面にいるのに三角形の外に出る)事があるので、
-    可視化しないなら広めに取る
-    """
+    # 側面
     tr = event['targetResources']
     return _is_flack(tr['facing'], parse_loc(tr), parse_loc(event['sourceResources']), facing_rng, width)
