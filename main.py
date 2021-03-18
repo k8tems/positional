@@ -58,19 +58,9 @@ def _is_back(f, target_loc, source_loc, F, width):
 
 def _is_flack(f, target_loc, source_loc, F, width):
     f_r = facing_to_radians(f, F)
-    top_corner, bottom_corner = get_quadrant_corners(target_loc, f_r, width, 1)
-    if is_point_in_triangle(source_loc,
-        get_point_symmetry_y(top_corner, target_loc[1]),
-        get_point_symmetry_y(bottom_corner, target_loc[1]),
-        target_loc):
+    if is_point_in_quadrant(source_loc, 1, target_loc, f_r, width):
         return True
-    top_corner, bottom_corner = get_quadrant_corners(target_loc, f_r, width, 3)
-    if is_point_in_triangle(source_loc,
-        get_point_symmetry_y(top_corner, target_loc[1]),
-        get_point_symmetry_y(bottom_corner, target_loc[1]),
-        target_loc):
-        return True
-    return False
+    return is_point_in_quadrant(source_loc, 3, target_loc, f_r, width)
 
 
 def parse_loc(res):
