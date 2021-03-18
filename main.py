@@ -1,4 +1,5 @@
 import numpy as np
+from collections import namedtuple
 
 
 DEFAULT_WIDTH = 100
@@ -42,25 +43,28 @@ def get_quadrant_corners(center, front, width, idx):
         get_circumference_crd(center, width, front + p_2 * 2 * np.pi)
 
 
-def is_point_in_quadrant(p, idx, center, tilt, width):
-    left_corner, right_corner = get_quadrant_corners(center, tilt, width, idx)
+def is_point_in_quadrant(p, idx, circle):
+    left_corner, right_corner = get_quadrant_corners(circle.center, circle.tilt, circle.width, idx)
     return is_point_in_triangle(
         p,
-        get_point_symmetry_y(left_corner, center[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
-        get_point_symmetry_y(right_corner, center[1]),
-        center)
+        get_point_symmetry_y(left_corner, circle.center[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
+        get_point_symmetry_y(right_corner, circle.center[1]),
+        circle.center)
+
+
+TargetCircle = namedtuple('TargetCircle', 'center width tilt')
 
 
 def _is_back(f, target_loc, source_loc, F, width):
     f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
-    return is_point_in_quadrant(source_loc, 2, target_loc, f_r, width)
+    return is_point_in_quadrant(source_loc, 2, TargetCircle(center=target_loc, width=width, tilt=f_r))
 
 
 def _is_flack(f, target_loc, source_loc, F, width):
     f_r = facing_to_radians(f, F)
-    if is_point_in_quadrant(source_loc, 1, target_loc, f_r, width):
+    if is_point_in_quadrant(source_loc, 1, TargetCircle(center=target_loc, width=width, tilt=f_r)):
         return True
-    return is_point_in_quadrant(source_loc, 3, target_loc, f_r, width)
+    return is_point_in_quadrant(source_loc, 3, TargetCircle(center=target_loc, width=width, tilt=f_r))
 
 
 def parse_loc(res):
