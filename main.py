@@ -67,8 +67,26 @@ def _is_flack(f, target_loc, source_loc, F, width):
     return is_point_in_quadrant(source_loc, 3, TargetCircle(center=target_loc, width=width, tilt=f_r))
 
 
-def parse_loc(res):
-    return res['x'] / 100, res['y'] / 100
+class PositionalEvent(dict):
+    @property
+    def tr(self):
+        return self['targetResources']
+
+    @property
+    def target_loc(self):
+        return self.tr['x'] / 100, self.tr['y'] / 100
+
+    @property
+    def target_facing(self):
+        return self.tr['facing']
+
+    @property
+    def sr(self):
+        return self['sourceResources']
+
+    @property
+    def source_loc(self):
+        return self.sr['x'] / 100, self.sr['y'] / 100
 
 
 def is_back(event, facing_rng, width=DEFAULT_WIDTH):
@@ -81,11 +99,11 @@ def is_back(event, facing_rng, width=DEFAULT_WIDTH):
     計算の結果が狂う(背面にいるのに三角形の外に出る)事があるので、
     可視化しないなら広めに取る
     """
-    tr = event['targetResources']
-    return _is_back(tr['facing'], parse_loc(tr), parse_loc(event['sourceResources']), facing_rng, width)
+    pe = PositionalEvent(event)
+    return _is_back(pe.target_facing, pe.target_loc, pe.source_loc, facing_rng, width)
 
 
 def is_flack(event, facing_rng, width=DEFAULT_WIDTH):
     # 側面
-    tr = event['targetResources']
-    return _is_flack(tr['facing'], parse_loc(tr), parse_loc(event['sourceResources']), facing_rng, width)
+    pe = PositionalEvent(event)
+    return _is_flack(pe.target_facing, pe.target_loc, pe.source_loc, facing_rng, width)
