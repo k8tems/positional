@@ -43,6 +43,9 @@ def get_quadrant_corners(center, front, width, idx):
         get_circumference_crd(center, width, front + p_2 * 2 * np.pi)
 
 
+TargetCircle = namedtuple('TargetCircle', 'center width tilt')
+
+
 def is_point_in_quadrant(p, idx, circle):
     left_corner, right_corner = get_quadrant_corners(circle.center, circle.tilt, circle.width, idx)
     return is_point_in_triangle(
@@ -50,9 +53,6 @@ def is_point_in_quadrant(p, idx, circle):
         get_point_symmetry_y(left_corner, circle.center[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
         get_point_symmetry_y(right_corner, circle.center[1]),
         circle.center)
-
-
-TargetCircle = namedtuple('TargetCircle', 'center width tilt')
 
 
 def _is_back(f, target_loc, source_loc, F, width):
