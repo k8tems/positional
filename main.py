@@ -42,14 +42,18 @@ def get_quadrant_corners(center, front, width, idx):
         get_circumference_crd(center, width, front + p_2 * 2 * np.pi)
 
 
+def is_point_in_quadrant(p, idx, center, f_r, width):
+    left_corner, right_corner = get_quadrant_corners(center, f_r, width, idx)
+    return is_point_in_triangle(
+        p,
+        get_point_symmetry_y(left_corner, center[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
+        get_point_symmetry_y(right_corner, center[1]),
+        center)
+
+
 def _is_back(f, target_loc, source_loc, F, width):
     f_r = facing_to_radians(f, F)  # ボスが向いてる向きのラジアン値
-    left_corner, right_corner = get_quadrant_corners(target_loc, f_r, width, 2)
-    return is_point_in_triangle(
-        source_loc,
-        get_point_symmetry_y(left_corner, target_loc[1]),  # y座標を反転させてffの座標システム(左上が0,0)準拠にする
-        get_point_symmetry_y(right_corner, target_loc[1]),
-        target_loc)
+    return is_point_in_quadrant(source_loc, 2, target_loc, f_r, width)
 
 
 def _is_flack(f, target_loc, source_loc, F, width):
