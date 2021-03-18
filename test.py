@@ -13,7 +13,7 @@ class TestCase(unittest.TestCase):
             return json.loads(f.read())
 
     def test_back_success(self):
-        # 開幕3GCD目の方向指定成功してる月光
+        # 開幕の方向指定成功してる月光
         self.assertTrue(is_back(self.read_event('fixtures/back.json'), facing_rng=self.facing_rng))
 
     def test_back_failure_short_width(self):
@@ -29,13 +29,14 @@ class TestCase(unittest.TestCase):
         self.assertTrue(is_flack(self.read_event('fixtures/right.json'), facing_rng=self.facing_rng))
 
     def test_left_success(self):
-        # 開幕3GCD目の方向指定成功してる月光
+        # キャラがボスの左で震天してるイベント
         self.assertTrue(is_flack(self.read_event('fixtures/left.json'), facing_rng=self.facing_rng))
 
     def test_flack_failure_short_width(self):
         self.assertFalse(is_flack(self.read_event('fixtures/right.json'), facing_rng=self.facing_rng, width=3))
 
     def test_flack_failure_behind(self):
+        # 後ろにいるので側面判定は失敗する筈
         self.assertFalse(is_flack(self.read_event('fixtures/back.json'), facing_rng=self.facing_rng))
 
 
