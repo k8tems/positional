@@ -52,16 +52,6 @@ def _is_back(f, target_loc, source_loc, F, width):
         target_loc)
 
 
-def get_left_flack_corners(center, front, width=DEFAULT_WIDTH):
-    return get_circumference_crd(center, width, front + np.pi / 4), \
-        get_circumference_crd(center, width, front + 3 * np.pi / 4)
-
-
-def get_right_flack_corners(center, front, width=DEFAULT_WIDTH):
-    return get_circumference_crd(center, width, front - np.pi / 4), \
-        get_circumference_crd(center, width, front + 5 * np.pi / 4)
-
-
 def get_quadrant_corners(center, front, width, idx):
     # タゲサークルを罰印で4つに分けた時の第n象限の円周座標を返す
     # `idx`は[0,1,2,3]の値を取り、北から反時計回りに増加
